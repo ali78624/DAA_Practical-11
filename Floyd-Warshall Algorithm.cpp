@@ -1,54 +1,73 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
-#define INF 99999
+#define MAX 10
+#define INF 9999
+
+/*=========================================================
+    Floyd-Warshall Algorithm
+
+    Time Complexity:
+    Best Case    : O(V^3)
+    Average Case : O(V^3)
+    Worst Case   : O(V^3)
+
+    Space Complexity:
+    O(V^2)
+
+    Where:
+    V = Number of Vertices
+
+    Note:
+    Finds the shortest paths between all pairs
+    of vertices in a weighted graph.
+=========================================================*/
 
 int main()
 {
+    int graph[MAX][MAX];
     int n;
-    int dist[10][10];
+    int i, j, k;
 
     cout << "Enter number of vertices: ";
     cin >> n;
 
-    cout << "Enter the adjacency matrix:\n";
+    cout << "Enter Cost Matrix (Enter 9999 for Infinity):\n";
 
-    for(int i = 0; i < n; i++)
+    for(i = 0; i < n; i++)
     {
-        for(int j = 0; j < n; j++)
+        for(j = 0; j < n; j++)
         {
-            cin >> dist[i][j];
+            cin >> graph[i][j];
         }
     }
 
     // Floyd-Warshall Algorithm
-    for(int k = 0; k < n; k++)
+    for(k = 0; k < n; k++)
     {
-        for(int i = 0; i < n; i++)
+        for(i = 0; i < n; i++)
         {
-            for(int j = 0; j < n; j++)
+            for(j = 0; j < n; j++)
             {
-                if(dist[i][k] != INF && dist[k][j] != INF)
+                if(graph[i][k] + graph[k][j] < graph[i][j])
                 {
-                    if(dist[i][j] > dist[i][k] + dist[k][j])
-                    {
-                        dist[i][j] = dist[i][k] + dist[k][j];
-                    }
+                    graph[i][j] = graph[i][k] + graph[k][j];
                 }
             }
         }
     }
 
-    cout << "\nShortest distance matrix:\n";
+    cout << "\nShortest Distance Matrix:\n";
 
-    for(int i = 0; i < n; i++)
+    for(i = 0; i < n; i++)
     {
-        for(int j = 0; j < n; j++)
+        for(j = 0; j < n; j++)
         {
-            if(dist[i][j] == INF)
+            if(graph[i][j] == INF)
                 cout << "INF ";
             else
-                cout << dist[i][j] << " ";
+                cout << setw(4) << graph[i][j] << " ";
         }
         cout << endl;
     }
